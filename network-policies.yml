@@ -1,0 +1,62 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-policy
+  namespace: namespacea
+spec:
+  podSelector:
+    matchLabels:
+      app: deploymenta
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: deploymenta
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-a-to-b
+  namespace: namespaceb
+spec:
+  podSelector:
+    matchLabels:
+      app: deploymentb
+  ingress:
+  - from:
+      - namespaceSelector:
+          matchLabels:
+            kubernetes.io/metadata.name: namespacea
+        podSelector:
+          matchLabels:
+            app: deploymenta
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-policy
+  namespace: namespaceb
+spec:
+  podSelector:
+    matchLabels:
+      app: deploymentb
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: deploymentb
+---
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-policy
+  namespace: namespacec
+spec:
+  podSelector:
+    matchLabels:
+      app: deploymentc
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: deploymentc
