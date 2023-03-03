@@ -1,0 +1,118 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: namespacea
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: namespaceb
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: namespacec
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploymenta
+  namespace: namespacea
+spec:
+  selector:
+    matchLabels:
+      app: deploymenta
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: deploymenta
+    spec:
+      containers:
+      - name: deploymenta
+        image: nginx
+        ports:
+        - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploymentb
+  namespace: namespaceb
+spec:
+  selector:
+    matchLabels:
+      app: deploymentb
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: deploymentb
+    spec:
+      containers:
+      - name: deploymentb
+        image: nginx
+        ports:
+        - containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deploymentc
+  namespace: namespacec
+spec:
+  selector:
+    matchLabels:
+      app: deploymentc
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: deploymentc
+    spec:
+      containers:
+      - name: deploymentc
+        image: nginx
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: servicea
+  namespace: namespacea
+spec:
+  selector:
+    app: deploymenta
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: serviceb
+  namespace: namespaceb
+spec:
+  selector:
+    app: deploymentb
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: servicec
+  namespace: namespacec
+spec:
+  selector:
+    app: deploymentc
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
